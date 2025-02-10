@@ -1,296 +1,161 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport"
-		content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover">
-	<title>My LIFF App3</title>
-	<style>
-
-		button {
-			display: block;
-			width: 50%;
-			height: 10%;
-			padding: 16px 0;
-			margin: auto 0;
-		}
-	</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>LINE LIFF Prank</title>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        button { display: block; width: 60%; padding: 15px; margin: 10px auto; font-size: 18px; }
+    </style>
 </head>
-
 <body>
-	<button id="btnShare" onclick="sendShare_Gift()" style="display: none;margin: 20px auto;padding: 20px;">Gift</button>
-	<button id="btnShare2" onclick="sendShare_Ladder()" style="display: none;margin: 20px auto;padding: 20px;">Ladder</button>
-	<button id="btnShare3" onclick="sendShare_Pay()" style="display: none;margin: 20px auto;padding: 20px;">Pay</button>
-	<button id="btnLogin" onclick="liff.login()" style="display: none;margin: 20px auto;padding: 20px;">Log In</button>
-	<button id="btnLogOut" onclick="logOut()" style="display: none;margin: 20px auto;padding: 20px;">Log Out</button>
-	<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-	<script>
-		async function sendShare_Gift() {
+    <button id="btnShare" onclick="sendShare_Gift()" style="display: none;">Gift</button>
+    <button id="btnShare2" onclick="sendShare_Ladder()" style="display: none;">Ladder</button>
+    <button id="btnShare3" onclick="sendShare_Pay()" style="display: none;">Pay</button>
+    <button id="btnLogin" onclick="liff.login()" style="display: none;">Log In</button>
+    <button id="btnLogOut" onclick="logOut()" style="display: none;">Log Out</button>
+
+    <script>
+        async function main() {
+            await liff.init({ liffId: "2006886128-0XBE3yO7" });
+            if (liff.isLoggedIn()) {
+                document.getElementById("btnShare").style.display = "block";
+                document.getElementById("btnShare2").style.display = "block";
+                document.getElementById("btnShare3").style.display = "block";
+                if (!liff.isInClient()) {
+                    document.getElementById("btnLogOut").style.display = "block";
+                }
+            } else {
+                document.getElementById("btnLogin").style.display = "block";
+            }
+        }
+
+        async function sendShare_Gift() {
+            const message = { "type": "flex", "altText": "你收到了一個禮物！", "contents": { "type": "bubble", "body": { "type": "box", "layout": "vertical", "contents": [ { "type": "text", "text": "🎁 你收到了一個禮物！", "weight": "bold", "size": "lg" } ] } } };
+            await liff.shareTargetPicker([message]).catch(err => console.error("分享失敗", err));
+        }
+
+        async function sendShare_Ladder() {
+            const message = { "type": "flex", "altText": "來玩爬梯子遊戲吧！", "contents": { "type": "bubble", "body": { "type": "box", "layout": "vertical", "contents": [ { "type": "text", "text": "來玩爬梯子遊戲吧！", "weight": "bold", "size": "lg" } ] } } };
+            await liff.shareTargetPicker([message]).catch(err => console.error("分享失敗", err));
+        }
+
+        async function sendShare_Pay() {
 			name = await liff.getProfile().then((profile) => {
 				return profile.displayName;
 			}).catch((err) => {
 				return err;
 			});
-
 			const result = await liff.shareTargetPicker([
 				{
 					"type": "flex",
-					"altText": name + "送禮物來囉!",
+					"altText": "已收到NT$ 520的轉帳。",
 					"contents": {
-						"type": "bubble",
-						"size": "kilo",
-						"hero": {
+						  "type": "bubble",
+						  "size": "hecto",
+						  "hero": {
 							"type": "image",
-							"url": "https://img.onl/olwxWE",
-							"size": "full",
-							"aspectRatio": "18:19",
-							"action": {
-								"type": "uri",
-								"label": "action",
-								"uri": "https://liff.line.me/1657022499-njBkN1k3?auto=yes&type=text&text=%E6%88%91%E5%96%9C%E6%AD%A1%E4%BD%A0%20%E8%B7%9F%E6%88%91%E4%BA%A4%E5%BE%80%E5%A5%BD%E3%84%87%20%3E%3C"
-							},
-							"offsetTop": "none",
-							"offsetBottom": "none",
-							"offsetStart": "none",
-							"margin": "none",
-							"align": "center",
-							"aspectMode": "cover"
-						},
-						"body": {
-							"type": "box",
-							"layout": "horizontal",
-							"spacing": "none",
-							"action": {
-								"type": "uri",
-								"label": "action",
-								"uri": "https://liff.line.me/1657022499-njBkN1k3?auto=yes&type=text&text=%E6%88%91%E5%96%9C%E6%AD%A1%E4%BD%A0%20%E8%B7%9F%E6%88%91%E4%BA%A4%E5%BE%80%E5%A5%BD%E3%84%87%20%3E%3C"
-							},
-							"contents": [
-								{
-									"type": "image",
-									"url": "https://img.onl/pNQsvU",
-									"align": "start",
-									"size": "md",
-									"offsetTop": "none",
-									"offsetBottom": "none",
-									"action": {
-										"type": "uri",
-										"label": "action",
-										"uri": "https://liff.line.me/1657022499-njBkN1k3?auto=yes&type=text&text=%E6%88%91%E5%96%9C%E6%AD%A1%E4%BD%A0%20%E8%B7%9F%E6%88%91%E4%BA%A4%E5%BE%80%E5%A5%BD%E3%84%87%20%3E%3C"
-									},
-									"offsetStart": "none",
-									"position": "relative",
-									"offsetEnd": "none"
-								},
-								{
-									"type": "text",
-									"text": "【星巴克】大杯芝麻杏仁豆腐星冰樂即享券",
-									"size": "md",
-									"weight": "bold",
-									"margin": "none",
-									"align": "start",
-									"offsetTop": "xxl",
-									"contents": [],
-									"style": "normal",
-									"offsetEnd": "none",
-									"wrap": true,
-									"offsetBottom": "none",
-									"offsetStart": "none",
-									"action": {
-										"type": "uri",
-										"label": "action",
-										"uri": "https://liff.line.me/1657022499-njBkN1k3?auto=yes&type=text&text=%E6%88%91%E5%96%9C%E6%AD%A1%E4%BD%A0%20%E8%B7%9F%E6%88%91%E4%BA%A4%E5%BE%80%E5%A5%BD%E3%84%87%20%3E%3C"
-									},
-									"position": "relative"
-								}
-							],
-							"margin": "none",
-							"offsetTop": "none",
-							"position": "relative",
-							"offsetStart": "none",
-							"offsetEnd": "none",
-							"offsetBottom": "none"
-						},
-						"footer": {
-							"type": "box",
-							"layout": "vertical",
-							"contents": [
-								{
-									"type": "button",
-									"color": "#EEE9E9",
-									"margin": "none",
-									"action": {
-										"type": "uri",
-										"label": "打開我的禮物",
-										"uri": "https://liff.line.me/1657022499-njBkN1k3?auto=yes&type=text&text=%E6%88%91%E5%96%9C%E6%AD%A1%E4%BD%A0%20%E8%B7%9F%E6%88%91%E4%BA%A4%E5%BE%80%E5%A5%BD%E3%84%87%20%3E%3C"
-									},
-									"style": "secondary"
-								},
-								{
-									"type": "button",
-									"action": {
-										"type": "uri",
-										"label": "傳送感謝小卡",
-										"uri": "https://liff.line.me/1657022499-njBkN1k3?auto=yes&type=text&text=%E6%88%91%E5%96%9C%E6%AD%A1%E4%BD%A0%20%E8%B7%9F%E6%88%91%E4%BA%A4%E5%BE%80%E5%A5%BD%E3%84%87%20%3E%3C"
-									}
-								},
-								{
-									"type": "separator"
-								},
-								{
-									"type": "box",
-									"layout": "vertical",
-									"contents": [
-										{
-											"type": "button",
-											"action": {
-												"type": "uri",
-												"label": "LINE禮物",
-												"uri": "https://liff.line.me/1657022499-njBkN1k3?auto=yes&type=text&text=%E6%88%91%E5%96%9C%E6%AD%A1%E4%BD%A0%20%E8%B7%9F%E6%88%91%E4%BA%A4%E5%BE%80%E5%A5%BD%E3%84%87%20%3E%3C"
-											},
-											"position": "relative",
-											"margin": "none",
-											"height": "sm",
-											"style": "link",
-											"offsetTop": "none",
-											"offsetStart": "none",
-											"offsetEnd": "none"
-										}
-									],
-									"action": {
-										"type": "uri",
-										"label": "action",
-										"uri": "https://liff.line.me/1657022499-njBkN1k3?auto=yes&type=text&text=%E6%88%91%E5%96%9C%E6%AD%A1%E4%BD%A0%20%E8%B7%9F%E6%88%91%E4%BA%A4%E5%BE%80%E5%A5%BD%E3%84%87%20%3E%3C"
-									}
-								}
-							]
-						}
-					}
-				}
-			])
-			if (result) {
-				alert(`[${result.status}] Message sent!`)
-			} else {
-				const [majorVer, minorVer, patchVer] = (liff.getLineVersion() || "").split('.');
-
-				if (minorVer === undefined) {
-					alert('ShareTargetPicker was canceled in external browser')
-					return
-				}
-
-				if (parseInt(majorVer) >= 10 && parseInt(minorVer) >= 10 && parseInt(patchVer) > 0) {
-					alert('ShareTargetPicker was canceled in LINE app')
-				}
-			}
-		}
-
-		async function sendShare_Ladder() {
-			name = await liff.getProfile().then((profile) => {
-				return profile.displayName;
-			}).catch((err) => {
-				return err;
-			});
-
-			const result = await liff.shareTargetPicker([
-				{
-					"type": "flex",
-					"altText": "爬梯子遊戲已建立，讓梯子決定您的命運吧！",
-					"contents": {
-						"type": "bubble",
-						"size": "kilo",
-						"hero": {
-							"type": "image",
-							"url": "https://img.onl/qCFiCL",
+							"url": "https://i.imgur.com/j5VkCxE.png",
 							"size": "full",
 							"aspectRatio": "20:13",
 							"aspectMode": "cover",
 							"action": {
-								"type": "uri",
-								"uri": "https://liff.line.me/1657022499-njBkN1k3?auto=yes&type=text&text=%E7%A5%9D%E5%A4%A7%E5%AE%B6520%E5%BF%AB%E6%A8%82%21"
-							}
-						},
-						"body": {
+							  "type": "uri",
+							  "uri": "https://liff.line.me/1657022499-njBkN1k3?auto=yes&type=text&text=%E6%88%91%E8%B6%85%E7%AC%A8%20%E6%B4%BB%E8%A9%B2%E8%A2%AB%E9%A8%99"
+							},
+							"position": "relative"
+						  },
+						  "body": {
 							"type": "box",
 							"layout": "vertical",
 							"contents": [
-								{
-									"type": "text",
-									"text": "爬梯子",
-									"weight": "bold",
-									"size": "md"
-								},
-								{
-									"type": "box",
-									"layout": "vertical",
-									"margin": "md",
-									"spacing": "sm",
-									"contents": [
-										{
-											"type": "text",
-											"text": "我建立了一個爬梯子遊戲，馬上來看看結果吧！",
-											"wrap": true,
-											"color": "#666666",
-											"size": "sm",
-											"offsetEnd": "none",
-											"offsetStart": "none",
-											"offsetBottom": "none",
-											"offsetTop": "none",
-											"flex": 5
-										}
-									]
+							  {
+								"type": "text",
+								"text": "LINE Pay",
+								"weight": "bold",
+								"size": "xs",
+								"action": {
+								  "type": "uri",
+								  "label": "action",
+								  "uri": "https://liff.line.me/1657022499-njBkN1k3?auto=yes&type=text&text=%E6%88%91%E8%B6%85%E7%AC%A8%20%E6%B4%BB%E8%A9%B2%E8%A2%AB%E9%A8%99"
 								}
+							  },
+							  {
+								"type": "text",
+								"text": "您已收到 NT$ 520。（來自："+ name +"）",
+								"size": "xs",
+								"contents": [],
+								"color": "#8E8E8E",
+								"action": {
+								  "type": "uri",
+								  "label": "action",
+								  "uri": "https://liff.line.me/1657022499-njBkN1k3?auto=yes&type=text&text=%E6%88%91%E8%B6%85%E7%AC%A8%20%E6%B4%BB%E8%A9%B2%E8%A2%AB%E9%A8%99"
+								}
+							  },
+							  {
+								"type": "button",
+								"position": "relative",
+								"style": "secondary",
+								"height": "sm",
+								"margin": "lg",
+								"color": "#F0F0F0",
+								"action": {
+								  "type": "uri",
+								  "label": "瞭解更多",
+								  "uri": "https://liff.line.me/1657022499-njBkN1k3?auto=yes&type=text&text=%E6%88%91%E8%B6%85%E7%AC%A8%20%E6%B4%BB%E8%A9%B2%E8%A2%AB%E9%A8%99"
+								},
+								"scaling": true,
+								"offsetEnd": "none"
+							  }
 							],
 							"action": {
-								"type": "uri",
-								"label": "action",
-								"uri": "https://liff.line.me/1657022499-njBkN1k3?auto=yes&type=text&text=%E7%A5%9D%E5%A4%A7%E5%AE%B6520%E5%BF%AB%E6%A8%82%21"
+							  "type": "uri",
+							  "label": "action",
+							  "uri": "https://liff.line.me/1657022499-njBkN1k3?auto=yes&type=text&text=%E6%88%91%E8%B6%85%E7%AC%A8%20%E6%B4%BB%E8%A9%B2%E8%A2%AB%E9%A8%99"
 							}
-						},
-						"footer": {
+						  },
+						  "footer": {
 							"type": "box",
-							"layout": "vertical",
-							"spacing": "sm",
+							"layout": "baseline",
 							"contents": [
-								{
-									"type": "separator",
-									"margin": "none"
-								},
-								{
-									"type": "button",
-									"style": "link",
-									"height": "sm",
-									"action": {
-										"type": "uri",
-										"label": "開啟爬梯子遊戲",
-										"uri": "https://liff.line.me/1657022499-njBkN1k3?auto=yes&type=image&downloadUrl=https://i.imgur.com/vASFvRY.jpg&previewUrl=https://i.imgur.com/vASFvRY.jpg"
-									}
-								},
-								{
-									"type": "button",
-									"style": "link",
-									"height": "sm",
-									"action": {
-										"type": "uri",
-										"label": "查看全部結果",
-										"uri": "https://liff.line.me/1657022499-njBkN1k3?auto=yes&type=image&downloadUrl=https://i.imgur.com/ymZGzJT.jpg&previewUrl=https://i.imgur.com/ymZGzJT.jpg"
-									}
-								},
-								{
-									"type": "separator"
-								},
-								{
-									"type": "box",
-									"layout": "vertical",
-									"contents": [],
-									"margin": "sm"
-								}
+							  {
+								"type": "icon",
+								"url": "https://i.imgur.com/LriSrg0.png",
+								"margin": "none",
+								"size": "xs",
+								"scaling": true,
+								"offsetTop": "xs"
+							  },
+							  {
+								"type": "text",
+								"text": "LINE Pay",
+								"margin": "sm",
+								"size": "xxs",
+								"color": "#8E8E8E"
+							  },
+							  {
+								"type": "icon",
+								"url": "https://i.imgur.com/aKbXQ9D.png",
+								"margin": "sm",
+								"size": "xxs",
+								"offsetTop": "xs"
+							  }
 							],
-							"flex": 0,
-							"margin": "none",
-							"paddingTop": "none"
+							"action": {
+							  "type": "uri",
+							  "label": "action",
+							  "uri": "https://liff.line.me/1657022499-njBkN1k3?auto=yes&type=text&text=%E6%88%91%E8%B6%85%E7%AC%A8%20%E6%B4%BB%E8%A9%B2%E8%A2%AB%E9%A8%99"
+							},
+							"position": "relative"
+						  },
+						  "styles": {
+							"footer": {
+							  "separator": true
+							}
+						  }
 						}
-					}
 				}
 			])
 			if (result) {
@@ -308,160 +173,13 @@
 				}
 			}
 		}
-		
-		async function sendShare_Pay() {
-			name = await liff.getProfile().then((profile) => {
-				return profile.displayName;
-			}).catch((err) => {
-				return err;
-			});
-			const result = await liff.shareTargetPicker([
-				{
-{
-  "type": "bubble",
-  "hero": {
-    "type": "image",
-    "url": "https://i.imgur.com/vY1PeZt.png",
-    "size": "full",
-    "aspectRatio": "20:13",
-    "aspectMode": "cover",
-    "action": {
-      "type": "uri",
-      "uri": "https://line.me/"
-    }
-  },
-  "body": {
-    "type": "box",
-    "layout": "horizontal",
-    "contents": [
-      {
-        "type": "image",
-        "url": "https://lcp-prod-obs.line-scdn.net/0hcTO2GYlHPHtySym8bElDLCMWMApBOjhzGzMhRlYAChAkeysuMWggZCwRCRQjPQByMiUjQidIGRQ_cyhPJS0SeCNOHC44JihbD2YPaCgWCQAvJytIT2U/f640w",
-        "offsetTop": "none",
-        "offsetStart": "none",
-        "offsetEnd": "none",
-        "size": "md"
-      },
-      {
-        "type": "text",
-        "text": "【星巴克】165元星享飲料券",
-        "offsetTop": "lg",
-        "offsetBottom": "none",
-        "offsetEnd": "none",
-        "offsetStart": "none",
-        "size": "md",
-        "margin": "none",
-        "weight": "regular",
-        "style": "normal",
-        "position": "relative",
-        "maxLines": 2
-      }
-    ]
-  },
-  "footer": {
-    "type": "box",
-    "layout": "vertical",
-    "spacing": "sm",
-    "contents": [
-      {
-        "type": "button",
-        "style": "secondary",
-        "height": "sm",
-        "action": {
-          "type": "message",
-          "label": "打開我的禮物",
-          "text": "吳智揚 生日快樂 我會請你吃蛋糕"
+
+        function logOut() {
+            liff.logout();
+            location.reload();
         }
-      },
-      {
-        "type": "button",
-        "style": "secondary",
-        "height": "sm",
-        "action": {
-          "type": "message",
-          "label": "傳送感謝小卡",
-          "text": "吳智揚 生日快樂 我會請你吃蛋糕"
-        }
-      },
-      {
-        "type": "separator"
-      },
-      {
-        "type": "box",
-        "layout": "baseline",
-        "contents": [
-          {
-            "type": "icon",
-            "url": "https://i.imgur.com/g47Wt6P.png",
-            "size": "xl",
-            "offsetTop": "sm"
-          },
-          {
-            "type": "text",
-            "weight": "regular",
-            "text": "LINE 禮物",
-            "offsetStart": "sm",
-            "offsetBottom": "none",
-            "color": "#6C6C6C"
-          },
-          {
-            "type": "icon",
-            "url": "https://i.imgur.com/aKbXQ9D.png",
-            "position": "absolute",
-            "offsetEnd": "none",
-            "offsetTop": "md"
-          }
-        ],
-        "margin": "sm"
-      }
-    ],
-    "flex": 0
-  },
-  "action": {
-    "type": "message",
-    "label": "有人傳送禮物來囉!",
-    "text": "吳智揚 生日快樂 我會請你吃蛋糕"
-  },
-  "size": "hecto"
-}
-				}
-			])
-			if (result) {
-				alert(`[${result.status}] Message sent!`)
-			} else {
-				const [majorVer, minorVer, patchVer] = (liff.getLineVersion() || "").split('.');
 
-				if (minorVer === undefined) {
-					alert('ShareTargetPicker was canceled in external browser')
-					return
-				}
-
-				if (parseInt(majorVer) >= 10 && parseInt(minorVer) >= 10 && parseInt(patchVer) > 0) {
-					alert('ShareTargetPicker was canceled in LINE app')
-				}
-			}
-		}
-		
-		function logOut() {
-			liff.logout()
-			window.location.reload()
-		}
-
-		async function main() {
-			await liff.init({ liffId: "2006886128-0XBE3yO7" })
-			if (liff.isLoggedIn()) {
-				document.getElementById("btnShare").style.display = "block"
-				document.getElementById("btnShare2").style.display = "block"
-				document.getElementById("btnShare3").style.display = "block"
-				if (!liff.isInClient()) {
-					document.getElementById("btnLogOut").style.display = "block"
-				}
-			} else {
-				document.getElementById("btnLogin").style.display = "block"
-			}
-		}
-		main()
-	</script>
+        main();
+    </script>
 </body>
-
 </html>
