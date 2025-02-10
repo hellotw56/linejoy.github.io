@@ -11,8 +11,6 @@
     </style>
 </head>
 <body>
-    <button id="btnShare" onclick="sendShare_Gift()" style="display: none;">Gift</button>
-    <button id="btnShare2" onclick="sendShare_Ladder()" style="display: none;">Ladder</button>
     <button id="btnShare3" onclick="sendShare_Pay()" style="display: none;">Pay</button>
     <button id="btnLogin" onclick="liff.login()" style="display: none;">Log In</button>
     <button id="btnLogOut" onclick="logOut()" style="display: none;">Log Out</button>
@@ -21,8 +19,6 @@
         async function main() {
             await liff.init({ liffId: "2006886128-0XBE3yO7" });
             if (liff.isLoggedIn()) {
-                document.getElementById("btnShare").style.display = "block";
-                document.getElementById("btnShare2").style.display = "block";
                 document.getElementById("btnShare3").style.display = "block";
                 if (!liff.isInClient()) {
                     document.getElementById("btnLogOut").style.display = "block";
@@ -32,147 +28,92 @@
             }
         }
 
-        async function sendShare_Gift() {
-            const message = { "type": "flex", "altText": "你收到了一個禮物！", "contents": { "type": "bubble", "body": { "type": "box", "layout": "vertical", "contents": [ { "type": "text", "text": "🎁 你收到了一個禮物！", "weight": "bold", "size": "lg" } ] } } };
-            await liff.shareTargetPicker([message]).catch(err => console.error("分享失敗", err));
-        }
-
-        async function sendShare_Ladder() {
-            const message = { "type": "flex", "altText": "來玩爬梯子遊戲吧！", "contents": { "type": "bubble", "body": { "type": "box", "layout": "vertical", "contents": [ { "type": "text", "text": "來玩爬梯子遊戲吧！", "weight": "bold", "size": "lg" } ] } } };
-            await liff.shareTargetPicker([message]).catch(err => console.error("分享失敗", err));
-        }
-
         async function sendShare_Pay() {
-			name = await liff.getProfile().then((profile) => {
-				return profile.displayName;
-			}).catch((err) => {
-				return err;
-			});
-			const result = await liff.shareTargetPicker([
-				{
-					"type": "flex",
-					"altText": "已收到NT$ 520的轉帳。",
-					"contents": {
-						  "type": "bubble",
-						  "size": "hecto",
-						  "hero": {
-							"type": "image",
-							"url": "https://i.imgur.com/j5VkCxE.png",
-							"size": "full",
-							"aspectRatio": "20:13",
-							"aspectMode": "cover",
-							"action": {
-							  "type": "uri",
-							  "uri": "https://liff.line.me/1657022499-njBkN1k3?auto=yes&type=text&text=%E6%88%91%E8%B6%85%E7%AC%A8%20%E6%B4%BB%E8%A9%B2%E8%A2%AB%E9%A8%99"
-							},
-							"position": "relative"
-						  },
-						  "body": {
-							"type": "box",
-							"layout": "vertical",
-							"contents": [
-							  {
-								"type": "text",
-								"text": "LINE Pay",
-								"weight": "bold",
-								"size": "xs",
-								"action": {
-								  "type": "uri",
-								  "label": "action",
-								  "uri": "https://liff.line.me/1657022499-njBkN1k3?auto=yes&type=text&text=%E6%88%91%E8%B6%85%E7%AC%A8%20%E6%B4%BB%E8%A9%B2%E8%A2%AB%E9%A8%99"
-								}
-							  },
-							  {
-								"type": "text",
-								"text": "您已收到 NT$ 520。（來自："+ name +"）",
-								"size": "xs",
-								"contents": [],
-								"color": "#8E8E8E",
-								"action": {
-								  "type": "uri",
-								  "label": "action",
-								  "uri": "https://liff.line.me/1657022499-njBkN1k3?auto=yes&type=text&text=%E6%88%91%E8%B6%85%E7%AC%A8%20%E6%B4%BB%E8%A9%B2%E8%A2%AB%E9%A8%99"
-								}
-							  },
-							  {
-								"type": "button",
-								"position": "relative",
-								"style": "secondary",
-								"height": "sm",
-								"margin": "lg",
-								"color": "#F0F0F0",
-								"action": {
-								  "type": "uri",
-								  "label": "瞭解更多",
-								  "uri": "https://liff.line.me/1657022499-njBkN1k3?auto=yes&type=text&text=%E6%88%91%E8%B6%85%E7%AC%A8%20%E6%B4%BB%E8%A9%B2%E8%A2%AB%E9%A8%99"
-								},
-								"scaling": true,
-								"offsetEnd": "none"
-							  }
-							],
-							"action": {
-							  "type": "uri",
-							  "label": "action",
-							  "uri": "https://liff.line.me/1657022499-njBkN1k3?auto=yes&type=text&text=%E6%88%91%E8%B6%85%E7%AC%A8%20%E6%B4%BB%E8%A9%B2%E8%A2%AB%E9%A8%99"
-							}
-						  },
-						  "footer": {
-							"type": "box",
-							"layout": "baseline",
-							"contents": [
-							  {
-								"type": "icon",
-								"url": "https://i.imgur.com/LriSrg0.png",
-								"margin": "none",
-								"size": "xs",
-								"scaling": true,
-								"offsetTop": "xs"
-							  },
-							  {
-								"type": "text",
-								"text": "LINE Pay",
-								"margin": "sm",
-								"size": "xxs",
-								"color": "#8E8E8E"
-							  },
-							  {
-								"type": "icon",
-								"url": "https://i.imgur.com/aKbXQ9D.png",
-								"margin": "sm",
-								"size": "xxs",
-								"offsetTop": "xs"
-							  }
-							],
-							"action": {
-							  "type": "uri",
-							  "label": "action",
-							  "uri": "https://liff.line.me/1657022499-njBkN1k3?auto=yes&type=text&text=%E6%88%91%E8%B6%85%E7%AC%A8%20%E6%B4%BB%E8%A9%B2%E8%A2%AB%E9%A8%99"
-							},
-							"position": "relative"
-						  },
-						  "styles": {
-							"footer": {
-							  "separator": true
-							}
-						  }
-						}
-				}
-			])
-			if (result) {
-				alert(`[${result.status}] Message sent!`)
-			} else {
-				const [majorVer, minorVer, patchVer] = (liff.getLineVersion() || "").split('.');
+            name = await liff.getProfile().then((profile) => {
+                return profile.displayName;
+            }).catch((err) => {
+                return err;
+            });
+            const result = await liff.shareTargetPicker([
+                {
+                    "type": "flex",
+                    "altText": "已收到NT$ 520的轉帳。",
+                    "contents": {
+                        "type": "bubble",
+                        "size": "hecto",
+                        "hero": {
+                            "type": "image",
+                            "url": "https://i.imgur.com/j5VkCxE.png",
+                            "size": "full",
+                            "aspectRatio": "20:13",
+                            "aspectMode": "cover",
+                            "action": {
+                                "type": "uri",
+                                "uri": "https://liff.line.me/1657022499-njBkN1k3?auto=yes&type=text&text=%E6%88%91%E8%B6%85%E7%AC%A8%20%E6%B4%BB%E8%A9%B2%E8%A2%AB%E9%A8%99"
+                            }
+                        },
+                        "body": {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": "LINE Pay",
+                                    "weight": "bold",
+                                    "size": "xs"
+                                },
+                                {
+                                    "type": "text",
+                                    "text": "您已收到 NT$ 520。（來自：" + name + "）",
+                                    "size": "xs",
+                                    "color": "#8E8E8E"
+                                },
+                                {
+                                    "type": "button",
+                                    "style": "secondary",
+                                    "height": "sm",
+                                    "margin": "lg",
+                                    "color": "#F0F0F0",
+                                    "action": {
+                                        "type": "uri",
+                                        "label": "瞭解更多",
+                                        "uri": "https://liff.line.me/1657022499-njBkN1k3?auto=yes&type=text&text=%E6%88%91%E8%B6%85%E7%AC%A8%20%E6%B4%BB%E8%A9%B2%E8%A2%AB%E9%A8%99"
+                                    }
+                                }
+                            ]
+                        },
+                        "footer": {
+                            "type": "box",
+                            "layout": "baseline",
+                            "contents": [
+                                {
+                                    "type": "icon",
+                                    "url": "https://i.imgur.com/LriSrg0.png",
+                                    "size": "xs"
+                                },
+                                {
+                                    "type": "text",
+                                    "text": "LINE Pay",
+                                    "size": "xxs",
+                                    "color": "#8E8E8E"
+                                },
+                                {
+                                    "type": "icon",
+                                    "url": "https://i.imgur.com/aKbXQ9D.png",
+                                    "size": "xxs"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]);
 
-				if (minorVer === undefined) {
-					alert('ShareTargetPicker was canceled in external browser')
-					return
-				}
-
-				if (parseInt(majorVer) >= 10 && parseInt(minorVer) >= 10 && parseInt(patchVer) > 0) {
-					alert('ShareTargetPicker was canceled in LINE app')
-				}
-			}
-		}
+            if (result) {
+                alert(`[${result.status}] Message sent!`);
+            } else {
+                alert('ShareTargetPicker was canceled');
+            }
+        }
 
         function logOut() {
             liff.logout();
